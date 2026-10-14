@@ -1,7 +1,6 @@
 // Lab work: merge of two sorted sequences (variant 9 - std::merge).
 //
 // Compiler : GCC 15.2.0 (MSYS2 MinGW-w64), C++20, CMake, Intel TBB
-//            (replace <VERSION> with the output of `g++ --version`).
 // Build    : cmake -S . -B build -DOPT_LEVEL=O3 && cmake --build build
 //            (Release mode, OPT_LEVEL = O0 / O1 / O2 / O3 / Ofast).
 // Run      : MergeExperiment [--regen]

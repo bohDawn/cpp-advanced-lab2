@@ -1,0 +1,184 @@
+Build type: Release, optimization level: -O0
+Compiler: 15.2.0
+Preparing data...
+Data is ready.
+
+Hardware threads: 12
+
+============================================================
+Sequences: 10000 + 15000 elements (seq_10000_a.txt, seq_10000_b.txt), median of 15 runs
+============================================================
+Standard merge (library):
+Mode                        Time (ms)     Speedup vs plain
+no policy                   0.1057        1.00
+execution::seq              0.1603        0.66
+execution::par              0.0478        2.21
+execution::par_unseq        0.0453        2.33
+Result correct: yes
+
+Custom parallel merge:
+K       Time (ms)     Speedup vs K=1    Correct
+1       0.2459        1.00              yes
+2       0.2183        1.13              yes
+3       0.2522        0.98              yes
+4       0.2402        1.02              yes
+5       0.2944        0.84              yes
+6       0.3042        0.81              yes
+7       0.3648        0.67              yes
+8       0.3763        0.65              yes
+9       0.4156        0.59              yes
+10      0.4984        0.49              yes
+11      0.4899        0.50              yes
+12      0.4848        0.51              yes
+13      0.5631        0.44              yes
+14      0.6189        0.40              yes
+15      0.6257        0.39              yes
+16      0.6691        0.37              yes
+17      0.6989        0.35              yes
+18      0.7721        0.32              yes
+19      0.8471        0.29              yes
+20      0.8422        0.29              yes
+21      0.8564        0.29              yes
+22      0.9720        0.25              yes
+23      0.9137        0.27              yes
+24      0.9981        0.25              yes
+36      1.4848        0.17              yes
+48      1.8012        0.14              yes
+Best K: 2 (0.2183 ms), K/threads = 0.1667
+Speed stops growing at K = 2 (0.2183 ms, within 5% of the best), K/threads = 0.1667
+
+============================================================
+Sequences: 100000 + 150000 elements (seq_100000_a.txt, seq_100000_b.txt), median of 15 runs
+============================================================
+Standard merge (library):
+Mode                        Time (ms)     Speedup vs plain
+no policy                   1.6276        1.00
+execution::seq              2.3626        0.69
+execution::par              0.3263        4.99
+execution::par_unseq        0.3472        4.69
+Result correct: yes
+
+Custom parallel merge:
+K       Time (ms)     Speedup vs K=1    Correct
+1       1.8566        1.00              yes
+2       1.0067        1.84              yes
+3       0.7275        2.55              yes
+4       0.6654        2.79              yes
+5       0.6577        2.82              yes
+6       0.5742        3.23              yes
+7       0.5611        3.31              yes
+8       0.5586        3.32              yes
+9       0.5874        3.16              yes
+10      0.5662        3.28              yes
+11      0.5759        3.22              yes
+12      0.6358        2.92              yes
+13      0.6753        2.75              yes
+14      0.6986        2.66              yes
+15      0.7642        2.43              yes
+16      0.7634        2.43              yes
+17      0.7923        2.34              yes
+18      0.8411        2.21              yes
+19      0.8895        2.09              yes
+20      0.8962        2.07              yes
+21      0.9635        1.93              yes
+22      0.9819        1.89              yes
+23      1.0053        1.85              yes
+24      1.0372        1.79              yes
+36      1.5260        1.22              yes
+48      1.9643        0.95              yes
+Best K: 8 (0.5586 ms), K/threads = 0.6667
+Speed stops growing at K = 6 (0.5742 ms, within 5% of the best), K/threads = 0.5000
+
+============================================================
+Sequences: 1000000 + 1500000 elements (seq_1000000_a.txt, seq_1000000_b.txt), median of 15 runs
+============================================================
+Standard merge (library):
+Mode                        Time (ms)     Speedup vs plain
+no policy                   16.0718       1.00
+execution::seq              21.4920       0.75
+execution::par              3.4408        4.67
+execution::par_unseq        3.4597        4.65
+Result correct: yes
+
+Custom parallel merge:
+K       Time (ms)     Speedup vs K=1    Correct
+1       15.8106       1.00              yes
+2       8.1095        1.95              yes
+3       5.8481        2.70              yes
+4       4.4830        3.53              yes
+5       3.8733        4.08              yes
+6       3.5046        4.51              yes
+7       3.1035        5.09              yes
+8       2.8391        5.57              yes
+9       2.6880        5.88              yes
+10      2.4463        6.46              yes
+11      2.2901        6.90              yes
+12      2.4525        6.45              yes
+13      2.9656        5.33              yes
+14      2.9532        5.35              yes
+15      2.8599        5.53              yes
+16      2.7601        5.73              yes
+17      2.6715        5.92              yes
+18      2.5796        6.13              yes
+19      2.5535        6.19              yes
+20      2.4590        6.43              yes
+21      2.4717        6.40              yes
+22      2.3746        6.66              yes
+23      2.3723        6.66              yes
+24      2.3640        6.69              yes
+36      2.7141        5.83              yes
+48      3.0332        5.21              yes
+Best K: 11 (2.2901 ms), K/threads = 0.9167
+Speed stops growing at K = 11 (2.2901 ms, within 5% of the best), K/threads = 0.9167
+
+============================================================
+Sequences: 5000000 + 7500000 elements (seq_5000000_a.txt, seq_5000000_b.txt), median of 5 runs
+============================================================
+Standard merge (library):
+Mode                        Time (ms)     Speedup vs plain
+no policy                   81.4711       1.00
+execution::seq              106.7025      0.76
+execution::par              19.7361       4.13
+execution::par_unseq        18.1440       4.49
+Result correct: yes
+
+Custom parallel merge:
+K       Time (ms)     Speedup vs K=1    Correct
+1       82.6011       1.00              yes
+2       41.3367       2.00              yes
+3       29.2481       2.82              yes
+4       20.9735       3.94              yes
+5       16.9077       4.89              yes
+6       16.8803       4.89              yes
+7       15.2016       5.43              yes
+8       13.2686       6.23              yes
+9       11.8311       6.98              yes
+10      10.7612       7.68              yes
+11      9.7977        8.43              yes
+12      10.6137       7.78              yes
+13      14.9059       5.54              yes
+14      13.5321       6.10              yes
+15      13.1882       6.26              yes
+16      13.1884       6.26              yes
+17      12.6682       6.52              yes
+18      12.1560       6.80              yes
+19      11.9041       6.94              yes
+20      12.1873       6.78              yes
+21      12.5973       6.56              yes
+22      13.5950       6.08              yes
+23      13.9512       5.92              yes
+24      13.6252       6.06              yes
+36      12.3100       6.71              yes
+48      12.5064       6.60              yes
+Best K: 11 (9.7977 ms), K/threads = 0.9167
+Speed stops growing at K = 11 (9.7977 ms, within 5% of the best), K/threads = 0.9167
+
+============================================================
+SUMMARY (hardware threads: 12)
+============================================================
+Total N     plain      seq        par        par_unseq  bestK   K/thr      custom     satK    OK       
+25000       0.1057     0.1603     0.0478     0.0453     2       0.1667     0.2183     2       yes      
+250000      1.6276     2.3626     0.3263     0.3472     8       0.6667     0.5586     6       yes      
+2500000     16.0718    21.4920    3.4408     3.4597     11      0.9167     2.2901     11      yes      
+12500000    81.4711    106.7025   19.7361    18.1440    11      0.9167     9.7977     11      yes      
+(all times in ms; plain/seq/par/par_unseq - std::merge, custom - best K)

@@ -1,44 +1,48 @@
 #include "ParallelMerge.h"
+
 #include <algorithm>
+#include <cstddef>
 #include <thread>
-#include <iterator>
 
-using namespace std;
+void ParallelMerge::customParallelMerge(const std::vector<int>& a, const std::vector<int>& b,
+                                        std::vector<int>& out, int k) {
+    const std::size_t parts = static_cast<std::size_t>(std::max(k, 1));
+    out.resize(a.size() + b.size());
 
-vector<int> ParallelMerge::customParallelMerge(const vector<int>& v1, const vector<int>& v2, int K) {
-    if (K <= 0) K = 1;
-
-    size_t chunkSize1 = v1.size() / K;
-    size_t chunkSize2 = v2.size() / K;
-
-    vector<vector<int>> partialResults(K);
-    vector<thread> threads;
-
-    for (int i = 0; i < K; ++i) {
-        threads.emplace_back([&, i]() {
-            auto start1 = v1.begin() + i * chunkSize1;
-            auto end1 = (i == K - 1) ? v1.end() : start1 + chunkSize1;
-
-            auto start2 = v2.begin() + i * chunkSize2;
-            auto end2 = (i == K - 1) ? v2.end() : start2 + chunkSize2;
-
-            partialResults[i].resize(distance(start1, end1) + distance(start2, end2));
-            merge(start1, end1, start2, end2, partialResults[i].begin());
-        });
+    // Boundaries of the parts in `a` and the corresponding ones in `b`.
+    std::vector<std::size_t> aBound(parts + 1);
+    std::vector<std::size_t> bBound(parts + 1);
+    for (std::size_t i = 0; i <= parts; ++i) {
+        aBound[i] = a.size() * i / parts;
+        if (i == 0) {
+            bBound[i] = 0;
+        } else if (i == parts || aBound[i] >= a.size()) {
+            bBound[i] = b.size();
+        } else {
+            bBound[i] = static_cast<std::size_t>(
+                std::lower_bound(b.begin(), b.end(), a[aBound[i]]) - b.begin());
+        }
     }
 
+    std::vector<std::thread> threads;
+    threads.reserve(parts);
+    for (std::size_t i = 0; i < parts; ++i) {
+        threads.emplace_back([&, i]() {
+            std::merge(a.begin() + static_cast<std::ptrdiff_t>(aBound[i]),
+                       a.begin() + static_cast<std::ptrdiff_t>(aBound[i + 1]),
+                       b.begin() + static_cast<std::ptrdiff_t>(bBound[i]),
+                       b.begin() + static_cast<std::ptrdiff_t>(bBound[i + 1]),
+                       out.begin() + static_cast<std::ptrdiff_t>(aBound[i] + bBound[i]));
+        });
+    }
     for (auto& t : threads) {
         t.join();
     }
+}
 
-    vector<int> finalResult = move(partialResults[0]);
-    for (int i = 1; i < K; ++i) {
-        vector<int> temp(finalResult.size() + partialResults[i].size());
-        merge(finalResult.begin(), finalResult.end(), 
-              partialResults[i].begin(), partialResults[i].end(), 
-              temp.begin());
-        finalResult = move(temp);
-    }
-
-    return finalResult;
+std::vector<int> ParallelMerge::customParallelMerge(const std::vector<int>& a,
+                                                    const std::vector<int>& b, int k) {
+    std::vector<int> result;
+    customParallelMerge(a, b, result, k);
+    return result;
 }

@@ -1,45 +1,67 @@
 #include "DataGenerator.h"
+
+#include <algorithm>
 #include <fstream>
 #include <random>
-#include <algorithm>
+#include <stdexcept>
 
-using namespace std;
+namespace {
+constexpr int kMinValue = 1;
+constexpr int kMaxValue = 100'000'000;
+} 
 
-void DataGenerator::generateAndSave(size_t size1, size_t size2, const string& file1, const string& file2) {
-    vector<int> v1(size1);
-    vector<int> v2(size2);
-    
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<> dist(1, 1000000);
+std::vector<int> DataGenerator::makeSortedSequence(std::size_t size, unsigned seed) {
+    std::mt19937 gen(seed);
+    std::uniform_int_distribution<int> dist(kMinValue, kMaxValue);
 
-    for (size_t i = 0; i < size1; ++i) {
-        v1[i] = dist(gen);
+    std::vector<int> values(size);
+    for (int& value : values) {
+        value = dist(gen);
     }
-    for (size_t i = 0; i < size2; ++i) {
-        v2[i] = dist(gen);
-    }
-
-    sort(v1.begin(), v1.end());
-    sort(v2.begin(), v2.end());
-
-    save(v1, file1);
-    save(v2, file2);
+    std::sort(values.begin(), values.end());
+    return values;
 }
 
-vector<int> DataGenerator::loadFromFile(const string& filename) {
-    vector<int> data;
-    ifstream in(filename);
-    int val;
-    while (in >> val) {
-        data.push_back(val);
+void DataGenerator::generateAndSave(std::size_t size1, std::size_t size2,
+                                    const std::string& file1, const std::string& file2,
+                                    unsigned seed) {
+    save(makeSortedSequence(size1, seed), file1);
+    save(makeSortedSequence(size2, seed + 1), file2);
+}
+
+bool DataGenerator::ensureDataset(std::size_t size1, std::size_t size2,
+                                  const std::string& file1, const std::string& file2,
+                                  unsigned seed, bool forceRegenerate) {
+    if (!forceRegenerate && fileExists(file1) && fileExists(file2)) {
+        return false;
+    }
+    generateAndSave(size1, size2, file1, file2, seed);
+    return true;
+}
+
+std::vector<int> DataGenerator::loadFromFile(const std::string& filename) {
+    std::ifstream in(filename);
+    if (!in) {
+        throw std::runtime_error("Cannot open file for reading: " + filename);
+    }
+    std::vector<int> data;
+    int value = 0;
+    while (in >> value) {
+        data.push_back(value);
     }
     return data;
 }
 
-void DataGenerator::save(const vector<int>& v, const string& filename) {
-    ofstream out(filename);
-    for (int val : v) {
-        out << val << " ";
+void DataGenerator::save(const std::vector<int>& values, const std::string& filename) {
+    std::ofstream out(filename);
+    if (!out) {
+        throw std::runtime_error("Cannot open file for writing: " + filename);
     }
+    for (int value : values) {
+        out << value << ' ';
+    }
+}
+
+bool DataGenerator::fileExists(const std::string& filename) {
+    return std::ifstream(filename).good();
 }

@@ -1,10 +1,20 @@
 #pragma once
 
+#include <cstddef>
+#include <ostream>
 #include <string>
+#include <vector>
 
-using namespace std;
+// One pair of input sequences stored in text files.
+struct DatasetSpec {
+    std::size_t size1;
+    std::size_t size2;
+    std::string file1;
+    std::string file2;
+};
 
 class ExperimentRunner {
 public:
-    static void runAllExperiments(const string& file1, const string& file2);
+    // Runs all experiments for every dataset and prints tables to `out`.
+    static void runAll(const std::vector<DatasetSpec>& datasets, std::ostream& out);
 };
